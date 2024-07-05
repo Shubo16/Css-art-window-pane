@@ -1,0 +1,453 @@
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+:root {
+  --lamp-w: 12;
+  --lamp-h: 14;
+  --lamp-wire-w: 0.2;
+  --lamp-wire-h: 15;
+  --light-source-w: 30;
+  --light-source-h: 14;
+}
+body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  width: 100vw;
+  transition: background-color 0.45s;
+}
+
+body, .container, .window, .light, .cloud, .cloud2, .star, .lamp {
+  transition: ease-in 0.5s, color 0.5s;
+}
+
+.dark-mode {
+  background: black;
+}
+
+.container {
+  position: fixed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 60svh;
+  width: 60svw;
+  background: beige;
+}
+
+.container.dark-mode {
+  background-color: #34495e;
+}
+.floor-line {
+  position: absolute;
+  border-top: none;
+  border-block: none;
+  border-bottom: 2px solid black;
+  height: 30rem;
+  width: 35rem;
+}
+
+.window {
+  height: 30rem;
+  width: 19rem;
+  background: lightblue;
+  border-radius: 50% 50% 0 0;
+  border: 2px solid black;
+  overflow: hidden;
+  position: relative;
+}
+
+.window.dark-mode {
+  background: #87889c;
+}
+
+.window-frames {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.frame-container {
+  display: grid;
+  grid-template-rows: repeat(4, 1fr);
+  height: 100%;
+  width: 100%;
+  border: solid 0.5px black;
+  overflow: hidden;
+  border-left: none;
+  border-top: none;
+  z-index: 100;
+}
+
+.frame-container.single-frame {
+  grid-template-rows: repeat(4, 1fr);
+  border-right: none;
+}
+
+.frame {
+  border: solid 1px black;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  height: 100%;
+  width: 100%;
+}
+
+.sun,
+.moon {
+  stroke-width: 2;
+  transform: translateX(90%);
+  position: absolute;
+  cursor: pointer;
+  transition: ease-in 0.5s;
+  z-index: -1000;
+}
+
+.moon {
+  transform: translateX(140px);
+  opacity: 1;
+}
+
+.moon::after {
+  content: "";
+  transition: cubic-bezier(0.075, 0.82, 0.165, 1);
+}
+
+
+/* CLOUD */
+
+.cloud,
+.cloud2 {
+  position: absolute;
+  background: #eceff1;
+  box-shadow: 5px 5px rgba(0, 0, 0, 0.2);
+  border-radius: 50px;
+  z-index: 5;
+  transition: background-color 0.5s;
+}
+
+.cloud {
+  top: 20%;
+  left: 50%;
+  transform: translate(-50%, 0);
+  width: 150px;
+  height: 60px;
+}
+
+.cloud::after,
+.cloud::before,
+.cloud2::after,
+.cloud2::before {
+  content: "";
+  position: absolute;
+  background: inherit;
+  border-radius: inherit;
+}
+
+.cloud::after {
+  width: 50px;
+  height: 50px;
+  top: -25px;
+  left: 30px;
+}
+
+.cloud::before {
+  width: 70px;
+  height: 80px;
+  top: -30px;
+  left: 60px;
+}
+
+.cloud2 {
+  top: 35%;
+  left: 18%;
+  transform: translate(-50%, 0);
+  width: 150px;
+  height: 60px;
+}
+
+.cloud2::after {
+  width: 40px;
+  height: 40px;
+  top: -20px;
+  left: 20px;
+}
+
+.cloud2::before {
+  width: 80px;
+  height: 80px;
+  top: -30px;
+  left: 50px;
+}
+
+/* adding animation to the clouds  */
+@keyframes animateCloud {
+  0% {
+    margin-left: -200px;
+  }
+  100% {
+    margin-left: 20%;
+  }
+}
+
+.cloud,
+.cloud2 {
+  animation: animateCloud 10s linear infinite;
+  transform: scale(1);
+}
+
+/* Adding the keyframes first */
+/* Dark mode styles for the clouds */
+.cloud.dark-mode,
+.cloud2.dark-mode {
+  background: #bdc3c7;
+}
+
+/* rain effect */
+.rain {
+  height: 100vh;
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: url('https://media.geeksforgeeks.org/wp-content/uploads/20200828184719/rain-300x300.png') repeat;
+  z-index: 100;
+  animation: rain 0.2s linear infinite;
+  visibility: hidden; /* Initially hidden, will be shown in dark mode */
+  transition: visibility 5s, opacity 0.5s;
+  opacity: 0;
+}
+
+.rain.dark-mode {
+  visibility: visible;
+  opacity: 1;
+}
+
+.rain::before {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: #ffffff;
+  animation: lighting 5s linear infinite;
+  opacity: 0;
+}
+
+@keyframes rain {
+  0% {
+    background-position: 0% 0%;
+  }
+  100% {
+    background-position: 20% 100%;
+  }
+}
+
+@keyframes lighting {
+  0% {
+    opacity: 0;
+  }
+  10% {
+    opacity: 0;
+  }
+  11% {
+    opacity: 1;
+  }
+  14% {
+    opacity: 0;
+  }
+  20% {
+    opacity: 0;
+  }
+  21% {
+    opacity: 1;
+  }
+  24% {
+    opacity: 0;
+  }
+  104% {
+    opacity: 0;
+  }
+}
+
+/* Stars */
+.stars {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: -1; /* Place stars behind other elements */
+}
+
+.star {
+  position: absolute;
+  border-radius: 50%;
+  background: #fff;
+  display: block;
+  opacity: 0; /* Initially hide stars */
+}
+
+.star.dark-mode {
+  background: #ccc; /* Adjust star color for dark mode if needed */
+}
+
+/* Animation for stars */
+@keyframes glow {
+  0% {
+    opacity: 0.7;
+    transform: scale(0.9);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(0.9);
+  }
+}
+
+
+
+/* LAMP */
+.lamp-container {
+  position: fixed;
+  top: 5%; /* Centered vertically for demo purposes */
+  right: 32%; /* Centered horizontally for demo purposes */
+  transform: translate(-50%, -50%); /* Centers the container */
+  height: 100px;
+  width: 200px;
+  z-index: 999;
+}
+
+.lamp {
+  position: fixed;
+  top: calc(15.1rem + var(--lamp-wire-h) * 1vmin); /* Position below the wire */
+  right: calc(
+    37.5% - var(--lamp-w) * 0.5vmin
+  ); /* Centered horizontally with the wire */
+  height: calc(var(--lamp-h) * 1vmin);
+  width: calc(var(--lamp-w) * 1vmin);
+  z-index: 999;
+  border-radius: 50%;
+  background: linear-gradient(
+    to bottom,
+    #eb8fbb 42%,
+    #000 43%,
+    transparent 45%
+  );
+  transition: background-color 0.5s;
+}
+
+.lamp:hover {
+  cursor: pointer;
+}
+
+.lamp-wire {
+  position: fixed;
+  top: 15.1rem; /* Adjust as necessary */
+  right: 36.5%; /* Adjust as necessary */
+  z-index: 9999;
+  height: calc(var(--lamp-wire-h) * 1vmin);
+  width: calc(var(--lamp-wire-w) * 1vmin);
+  background: #444;
+}
+
+.light {
+  position: fixed; /* Position relative to the container */
+  top: calc(4rem + (var(--lamp-wire-h) * 1vmin) + (var(--lamp-h) * 1vmin)); /* Position below the lamp and wire */
+  right: calc(36.5% - (var(--lamp-w) * 0.51vmin)); /* Center horizontally with respect to the lamp */
+  filter: brightness(105%);
+  z-index: 100;
+  background: none;
+  height: calc(var(--light-source-h) * 1vmin);
+  width: calc(var(--light-w) / 1.02 * 1vmin);
+  border-bottom: calc(var(--light-source-h) * 2.52 * 1vmin) solid #F9E79F;
+  opacity: 0.7;
+  border-left: calc(var(--lamp-w) / 2 * 1vmin) solid transparent;
+  border-right: calc(var(--lamp-w) / 2 * 1vmin) solid transparent;
+  visibility: hidden; /* Initially hidden, can be shown dynamically */
+}
+
+
+
+.light.dark-mode{
+  visibility: visible !important;
+}
+
+
+
+/* desk */
+
+
+.study-desk{
+  width: 270px;
+  height: 270px;
+  position: absolute;
+  z-index: 9999;
+  top: 51%;
+  left: 15%;
+} 
+
+/* SMOKE */
+#smoke-1 {
+  stroke-dasharray: 0, 10;
+  animation: smoke 6s ease infinite;
+}
+
+#smoke-2 {
+  stroke-dasharray: 0, 10;
+  animation: smoke 6s 0.5s ease infinite;
+}
+
+@keyframes smoke {
+  0% { stroke-dasharray: 0, 10; }
+  50% { stroke-dasharray: 10, 0; }
+  100% { stroke-dasharray: 10, 0; opacity: 0; }
+}
+
+/* WRITING */
+#line-1 {
+  opacity: 0;
+  animation: writing 0.5s linear forwards;
+}
+
+#line-2 {
+  opacity: 0;
+  animation: writing 0.5s 1s linear forwards;
+}
+
+#line-3 {
+  opacity: 0;
+  animation: writing 0.5s 1.5s linear forwards;
+}
+
+#line-4 {
+  opacity: 0;
+  animation: writing 0.5s 2s linear forwards;
+}
+
+@keyframes writing {
+  0% { width: 0px; opacity: 1;}
+  100% { width: 14px; opacity: 1;}
+}
+
+/* Dark mode styles for the lamp */
+.lamp.dark-mode {
+  background: linear-gradient(to bottom, #444 42%, #000 43%, transparent 45%);
+}
+
+body.dark-mode .lamp-wire {
+  background: #222;
+}
+
+body.dark-mode {
+  background-color: #2c3e50;
+}
